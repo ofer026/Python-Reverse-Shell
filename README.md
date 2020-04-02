@@ -14,7 +14,7 @@ make sure that you have you public IP address there on `s.connect((%PUBLIC IP AD
 type in the terminal `pyinstaller -w --onefile "Multiple Clients/client.py"`.
 then you can delete the .spec file and the build folder.
 the exe will be in "dist" folder.
-\n
+
 ## Using the tool
 start server.py and wait for connection.
 to see of all your connections type `snake> list` in the interacive prompt.
