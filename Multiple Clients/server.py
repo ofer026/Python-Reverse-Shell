@@ -2,6 +2,7 @@ import socket
 import sys
 import threading
 from _thread import *
+import _thread
 from queue import Queue
 from time import sleep
 
@@ -65,7 +66,11 @@ def start_snake():
             if conn is not None:
                 send_target_commands(conn)
         elif "shutdown" in cmd:
-            sys.exit()
+            # Close all jobs
+            queue.task_done()
+            queue.task_done()
+            # Exit the program completely
+            quit()
         elif "help" in cmd:
             print_help()
         else:
@@ -143,6 +148,7 @@ threads = []
 def create_workers():
     for _ in range(number_of_threads):
         t = start_new_thread(work, (None, None))
+        threads.append(t)
 
 
 # Do the next job in the queue (one handles connections,  other sends commands)
@@ -169,3 +175,4 @@ if __name__ == "__main__":
     print("type \'help\' to get the list of all commands")
     create_workers()
     create_jobs()
+

