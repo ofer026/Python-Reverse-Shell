@@ -16,6 +16,7 @@ all_addresses = []
 COMMANDS = {'help': ['Shows this help'],
             'list': ['Lists connected clients'],
             'select': ['Selects a client by its index. Takes index as a parameter'],
+            'getos': ['Prints the OS of the selected client. To be used when client is selected'],
             'quit': ['Stops current connection with a client. To be used when client is selected'],
             'shutdown': ['Shuts server down'],
             }

