@@ -44,3 +44,6 @@ To get a list of all the commands of the interactive prompt and other special co
 If you want to quit from your connection, type `quit` and then you'll be back in the interactive prompt.
 
 If you want to quit from the entire program type `shutdown` in the interactive prompt.
+***
+## Collaboration
+If you want to collaborate with me about this project or about any other project, contect me on **ofer026@gmail.com**
