@@ -14,7 +14,10 @@ while True:
     full_msg = ''
     new_msg = True
     while True:
-        msg = s.recv(16)
+        try:
+            msg = s.recv(16)
+        except ConnectionResetError:
+            print("Connection was closed by the server")
         if new_msg:
             #print("new msg len:",msg[:HEADERSIZE])
             msglength = msg[:HEADERSIZE].decode("utf-8")

@@ -27,7 +27,11 @@ def recv_commands():
         full_msg = ''
         new_msg = True
         while True:
-            msg = s.recv(16)
+            try:
+                msg = s.recv(16)
+            except ConnectionResetError:
+                commands_process.close()
+                return
             if new_msg:
                 #print("new msg len:",msg[:HEADERSIZE])
                 msglength = msg[:HEADERSIZE].decode("utf-8")
@@ -141,6 +145,7 @@ save_button.place(x=560, y=200)
 # TODO create an exe of this (make sure that every thing is good before)
 
 commands_process = multiprocessing.Process(target=recv_commands)
+commands_process.daemon = True
 if __name__ == "__main__":
     commands_process.start()
     win.mainloop()

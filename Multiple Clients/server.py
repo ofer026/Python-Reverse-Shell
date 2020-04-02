@@ -20,11 +20,24 @@ COMMANDS = {'help': ['Shows this help'],
             'shutdown': ['Shuts server down'],
             }
 
+# Parts of the hello message
+hello_message_1 = "__        __         _                                       _               ____                    _\n" \
+                  "\ \      / /   ___  | |   ___    ___    _ __ ___     ___    | |_    ___     / ___|   _ __     __ _  | | __   ___ \n" \
+                  " \ \ /\ / /   / _ \ | |  / __|  / _ \  | '_ ` _ \   / _ \   | __|  / _ \    \___ \  | '_ \   / _` | | |/ /  / _ \ \n" \
+                  "  \ V  V /   |  __/ | | | (__  | (_) | | | | | | | |  __/   | |_  | (_) |    ___) | | | | | | (_| | |   <  |  __/\n" \
+                  "   \_/\_/     \___| |_|  \___|  \___/  |_| |_| |_|  \___|    \__|  \___/    |____/  |_| |_|  \__,_| |_|\_\  \___|"
+hello_message_2 = " ____                                                ____    _              _   _\n" \
+                  "|  _ \    ___  __   __   ___   _ __   ___    ___    / ___|  | |__     ___  | | | |\n" \
+                  "| |_) |  / _ \ \ \ / /  / _ \ | '__| / __|  / _ \   \___ \  | '_ \   / _ \ | | | |\n" \
+                  "|  _ <  |  __/  \ V /  |  __/ | |    \__ \ |  __/    ___) | | | | | |  __/ | | | |\n" \
+                  "|_| \_\  \___|   \_/    \___| |_|    |___/  \___|   |____/  |_| |_|  \___| |_| |_|\n"
+
 
 # prints all the commands and their when "help" is typed in the interactive prompt
-def print_help():
+def help():
     for cmd, v in COMMANDS.items():
         print("{0}:\t{1}".format(cmd, v[0]))
+
 
 def setup():
     global s
@@ -72,7 +85,7 @@ def start_snake():
             # Exit the program completely
             quit()
         elif "help" in cmd:
-            print_help()
+            help()
         else:
             print("snake: Command \'{}\' is not recognized".format(cmd))
 
@@ -171,8 +184,8 @@ def create_jobs():
 
 
 if __name__ == "__main__":
-    print("Welcome to Snake reverse shell!")
+    print(hello_message_1)
+    print(hello_message_2)
     print("type \'help\' to get the list of all commands")
     create_workers()
     create_jobs()
-
