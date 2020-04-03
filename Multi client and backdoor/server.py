@@ -100,7 +100,11 @@ def list_connections():
         try:
             # connection.send(bytes(' ', "utf-8"))
             # connection.recv(20480) # TODO FIX
-            test = 5
+            check_alive_msg = "check alive test"
+            check_alive_msg = f"{len(check_alive_msg):<{HEADERSIZE}}" + check_alive_msg
+            connection.send(bytes(check_alive_msg, "utf-8"))
+            connection.recv(1024)
+            #test = 5
         except:
             del all_connections[i]
             del all_addresses[i]

