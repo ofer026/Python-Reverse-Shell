@@ -1,8 +1,10 @@
 ![](http://myspecialsite.host20.uk/Icon%20image.png)
 ***
-## Overview
+# Overview
 This is a hacking tool to get a reverse shell.
+
 This is tool is for educational purpose only!
+
 The responsibility on every use of this tool is on the user only!
 
 Disclaimer: This reverse shell should only be used in the lawful, remote administration of authorized systems. Accessing a computer network without authorization or permission is illegal. 
@@ -42,3 +44,6 @@ To get a list of all the commands of the interactive prompt and other special co
 If you want to quit from your connection, type `quit` and then you'll be back in the interactive prompt.
 
 If you want to quit from the entire program type `shutdown` in the interactive prompt.
+***
+## Collaboration
+If you want to collaborate with me about this project or about any other project, contect me on **ofer026@gmail.com**
