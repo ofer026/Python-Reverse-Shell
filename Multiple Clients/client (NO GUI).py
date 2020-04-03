@@ -7,9 +7,23 @@ import getpass
 # ------CONSTANTS-------
 HEADERSIZE = 10
 
+# timeout variable
+timeout_count = 0
+
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("192.168.0.105", 42424))
-#s.setblocking(True)
+while True:
+    try:
+        s.connect(("192.168.0.105", 42424))
+    except socket.error:
+        if timeout_count == 10:  # if the connection attempt fails too many times. the program will quit
+            print("Server not responding. Exiting the program")
+            s.close()
+            quit()
+        timeout_count += 1
+    else:
+        break
+
 
 while True:
     full_msg = ''
