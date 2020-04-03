@@ -17,6 +17,8 @@ COMMANDS = {'help': ['Shows this help'],
             'list': ['Lists connected clients'],
             'select': ['Selects a client by its index. Takes index as a parameter'],
             'getos': ['Prints the OS of the selected client. To be used when client is selected'],
+            'info': ['Prints information about the client machine, this command will work only if the client machine OS is Windows. To be used when client is selected'],
+            'information': ['Prints information about the client machine, this command will work only if the client machine OS is not Windows. To be used when client is selected'],
             'quit': ['Stops current connection with a client. To be used when client is selected'],
             'shutdown': ['Shuts server down'],
             }
