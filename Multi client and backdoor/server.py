@@ -1,3 +1,6 @@
+# server script for the snake reverse shell project
+# By @ofer026
+
 import socket
 import threading
 from _thread import *
