@@ -24,6 +24,7 @@ all_addresses = []
 COMMANDS = {'help': ['Shows this help'],
             'list': ['Lists connected clients'],
             'select': ['Selects a client by its index. Takes index as a parameter'],
+            'send': ['Sends a file (Up to 9 GB) to a client. To be used in the interactive prompt'],
             'getos': ['Prints the OS of the selected client. To be used when client is selected'],
             'info': ['Prints information about the client machine, this command will work only if the client machine OS is Windows. To be used when client is selected'],
             'information': ['Prints information about the client machine, this command will work only if the client machine OS is not Windows. To be used when client is selected'],
@@ -129,7 +130,7 @@ def send_files(window):
         return
     except IndexError:
         print("Enter a number within the range of connections numbers")
-        return 
+        return
     except Exception("Negative number given"):
         return
     win_or_path = input("Do you want to enter the path(p or path) or select from a dialog(d or dialog)?\nYour answer: ")
