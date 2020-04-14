@@ -119,32 +119,37 @@ def start_snake():
 
 # send files to a selected client
 def send_files(window):
+    """
+    This function sends a file to a selected client
+    :param window: Tkinter window object
+    :return: None
+    """
     try:
-        connection_num = int(input("select a connection> "))
-        if connection_num <= -1:
+        connection_num = int(input("select a connection> "))  # gets the desired connection from the user
+        if connection_num <= -1:  # Checks if the number is valid
             print("Enter a positive number")
             raise Exception("Negative number given")
-        conn = all_connections[connection_num]
+        conn = all_connections[connection_num]  # Gets the connection object from the connections list
     except ValueError:
         print("Enter a Number")
-        return
+        return  # Returns to the interactive prompt
     except IndexError:
         print("Enter a number within the range of connections numbers")
-        return
+        return  # Returns to the interactive prompt
     except Exception("Negative number given"):
-        return
+        return  # Returns to the interactive prompt
     win_or_path = input("Do you want to enter the path(p or path) or select from a dialog(d or dialog)?\nYour answer: ")
     if win_or_path.lower() == "p" or win_or_path.lower() == "path":
         path = input("Enter the path: ")
-        if not os.path.exists(path):
+        if not os.path.exists(path):  # Checks if the file specified exists
             print("File not found!")
-            return
-        if not os.path.isfile(path):
+            return  # Returns to the interactive prompt
+        if not os.path.isfile(path):  # Checks if the file specified is a file and not a folder
             print("This is not a file!")
-            return
-        if os.stat(path).st_size > 9000009000:
+            return  # Returns to the interactive prompt
+        if os.stat(path).st_size > 9000009000:  # Checks if the file size is within the size limit
             print("File is too big! the maximum size is 9 GB")
-            return
+            return  # Returns to the interactive prompt
         file = open(path, "r")
         file_content = file.read()
         file.close()

